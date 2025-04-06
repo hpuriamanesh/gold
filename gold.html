@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>محاسبه‌گر قیمت و حباب طلا</title>
+  <style>
+    * {
+            font-family: Vazir, sans-serif;
+            box-sizing: border-box;
+        }
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 2rem;
+      color: #333;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #c49b0c;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #c49b0c;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      margin-top: 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+    }
+    .output {
+      margin-top: 1rem;
+      background-color: #fdf7e5;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px dashed #c49b0c;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>محاسبه اختلاف قیمت طلا با قیمت واقعی</h2>
+    <label>قیمت هر گرم طلا (تومان)</label>
+    <input type="number" id="goldPrice" placeholder="مثلاً 7700000">
+
+    <label>وزن طلا (گرم)</label>
+    <input type="number" id="goldWeight" placeholder="مثلاً 9.7">
+
+    <label>قیمت فروش طلا (تومان)</label>
+    <input type="number" id="goldSoldPrice" placeholder="مثلاً 80000000">
+
+    <button onclick="calculateDifference()">محاسبه</button>
+
+    <div class="output" id="goldDiffResult"></div>
+  </div>
+
+  <div class="container" style="margin-top: 2rem;">
+    <h2>محاسبه حباب طلای ۱۸ عیار</h2>
+    <label>قیمت اونس جهانی (دلار)</label>
+    <input type="number" id="ouncePrice" placeholder="مثلاً 3100">
+
+    <label>قیمت دلار در ایران (تومان)</label>
+    <input type="number" id="dollarPrice" placeholder="مثلاً 102000">
+
+    <label>قیمت فعلی طلای ۱۸ عیار در بازار (تومان)</label>
+    <input type="number" id="marketGoldPrice" placeholder="مثلاً 8235000">
+
+    <button onclick="calculateBubble()">محاسبه حباب</button>
+
+    <div class="output" id="bubbleResult"></div>
+  </div>
+
+  <script>
+    function formatNumber(num) {
+      return Number(num).toLocaleString('fa-IR');
+    }
+
+    function calculateDifference() {
+      const goldPrice = parseFloat(document.getElementById('goldPrice').value);
+      const goldWeight = parseFloat(document.getElementById('goldWeight').value);
+      const soldPrice = parseFloat(document.getElementById('goldSoldPrice').value);
+
+      if (!goldPrice || !goldWeight || !soldPrice) return;
+
+      const realPrice = goldPrice * goldWeight;
+      const diff = soldPrice - realPrice;
+      const diffPercent = (diff / realPrice) * 100;
+
+      document.getElementById('goldDiffResult').innerHTML = `
+        💰 قیمت واقعی طلا: <strong>${formatNumber(realPrice)} تومان</strong><br>
+        📈 اختلاف قیمت با واقعیت: <strong>${formatNumber(diff)} تومان</strong><br>
+        📊 درصد اختلاف: <strong>${diffPercent.toFixed(2)}٪</strong>
+      `;
+    }
+
+    function calculateBubble() {
+      const ouncePrice = parseFloat(document.getElementById('ouncePrice').value);
+      const dollarPrice = parseFloat(document.getElementById('dollarPrice').value);
+      const marketGoldPrice = parseFloat(document.getElementById('marketGoldPrice').value);
+      const gramInOunce = 31.1035;
+
+      if (!ouncePrice || !dollarPrice || !marketGoldPrice) return;
+
+      const realGoldPrice = (ouncePrice * dollarPrice / gramInOunce) * 0.75;
+      const bubble = marketGoldPrice - realGoldPrice;
+
+      document.getElementById('bubbleResult').innerHTML = `
+        🎯 قیمت واقعی طلای ۱۸ عیار: <strong>${formatNumber(realGoldPrice.toFixed(0))} تومان</strong><br>
+        🎈 حباب طلا: <strong>${formatNumber(bubble.toFixed(0))} تومان</strong>
+      `;
+    }
+  </script>
+</body>
+</html>
